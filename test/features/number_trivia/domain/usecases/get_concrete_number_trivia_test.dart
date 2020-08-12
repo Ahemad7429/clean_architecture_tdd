@@ -23,18 +23,14 @@ void main() {
   test(
     'should get trivia for the number from the repository',
     () async {
-      // "On the fly" implementation of the Repository using the Mockito package.
-      // When getConcreteNumberTrivia is called with any argument, always answer with
-      // the Right "side" of Either containing a test NumberTrivia object.
+      // arrange
       when(mockNumberTriviaRepository.getConcreteNumberTrivia(any))
           .thenAnswer((_) async => Right(tNumberTrivia));
-      // The "act" phase of the test. Call the not-yet-existent method.
-      final result = await usecase.execute(number: tNumber);
-      // UseCase should simply return whatever was returned from the Repository
+      // act
+      final result = await usecase(Params(number: tNumber));
+      // assert
       expect(result, Right(tNumberTrivia));
-      // Verify that the method has been called on the Repository
       verify(mockNumberTriviaRepository.getConcreteNumberTrivia(tNumber));
-      // Only the above method should be called and nothing more.
       verifyNoMoreInteractions(mockNumberTriviaRepository);
     },
   );
